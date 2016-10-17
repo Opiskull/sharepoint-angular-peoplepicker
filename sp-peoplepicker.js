@@ -64,7 +64,7 @@
                 scope.peoplePicker.InstanceName = "peoplePicker";
                 // Pass current language, if not set defaults to en-US. Use the SPLanguage query string param or provide a string like "nl-BE"
                 // Do not set the Language property if you do not have foreseen javascript resource file for your language
-                peoplePicker.Language = $translate.proposedLanguage();
+                scope.peoplePicker.Language = $translate.use();
                 // optionally show more/less entries in the people picker dropdown, 4 is the default
                 scope.peoplePicker.MaxEntriesShown = scope.maxEntries;
                 // Can duplicate entries be selected (default = false)

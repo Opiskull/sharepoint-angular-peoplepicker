@@ -77,9 +77,12 @@
                 scope.peoplePicker.OnSelectionChanged = function () {
                     var result = JSON.parse($('#hdnPeoplePick', element).val());
                     ngModel.$setViewValue(result);
-                    ngModel.$render();
-                    scope.$apply();
-
+                    ngModel.$render();  
+                    // workaround for digest already in progress
+                    var phase = scope.$root.$$phase;
+                    if(phase !== '$apply' && phase !== '$digest') {                        
+                        scope.$apply();
+                    }
                     // check validity
                     isValid();
                 };

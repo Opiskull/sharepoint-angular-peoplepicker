@@ -1,6 +1,6 @@
 (function () {
 
-    angular.module('sp-peoplepicker', []).directive('spPeoplePicker', function ($q, $timeout, $compile) {
+    angular.module('sp-peoplepicker', ['pascalprecht.translate']).directive('spPeoplePicker', function ($q, $timeout, $compile, $translate) {
         //Usage:
         //<sp-people-picker name="taskAssignee" id="taskAssignee" data-ng-model="$scope.taskAssignees" min-entries="1" max-entries="5" allow-duplicates="false" show-login="false" show-title="true" min-characters="2" app-web-url="$scope.spAppWebUrl" />
         var directive = {
@@ -64,7 +64,7 @@
                 scope.peoplePicker.InstanceName = "peoplePicker";
                 // Pass current language, if not set defaults to en-US. Use the SPLanguage query string param or provide a string like "nl-BE"
                 // Do not set the Language property if you do not have foreseen javascript resource file for your language
-                peoplePicker.Language = spLanguage;
+                peoplePicker.Language = $translate.proposedLanguage();
                 // optionally show more/less entries in the people picker dropdown, 4 is the default
                 scope.peoplePicker.MaxEntriesShown = scope.maxEntries;
                 // Can duplicate entries be selected (default = false)

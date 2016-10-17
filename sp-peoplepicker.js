@@ -79,10 +79,7 @@
                     ngModel.$setViewValue(result);
                     ngModel.$render();
                     // workaround for digest already in progress
-                    var phase = scope.$root.$$phase;
-                    if (phase !== '$apply' && phase !== '$digest') {
-                        scope.$apply();
-                    }
+                    saveApply();
                     // check validity
                     isValid();
                 };
@@ -95,6 +92,13 @@
                 // Hookup everything
                 scope.peoplePicker.Initialize();
                 isValid();
+
+                function saveApply() {
+                    var phase = scope.$root.$$phase;
+                    if (phase !== '$apply' && phase !== '$digest') {
+                        scope.$apply();
+                    }
+                }
 
                 // check if the field is valid
                 function isValid() {
@@ -112,6 +116,8 @@
 
                     var valid = minBounds && maxBounds;
                     ngModel.$setValidity('required', valid);
+                    // Angular does not update after validity is set
+                    saveApply();
                 }
             });
         }
@@ -499,6 +505,8 @@
                                 parent.PeoplePickerControl.html(parent.ResolvedUsersToHtml());
                                 // focus back to input control
                                 parent.PeoplePickerEdit.focus();
+                                // should update the angular validation
+                                parent.OnSelectionChanged();
                                 // Eat the backspace key
                                 return false;
                             }

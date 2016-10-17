@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
 
     angular.module('sp-peoplepicker', []).directive('spPeoplePicker', function ($q, $timeout, $compile) {
         //Usage:
@@ -43,17 +43,17 @@
 
         function link(scope, element, attrs, ngModel) {
             //Make a people picker control
-            $q.when().then(function() {
+            $q.when().then(function () {
                 var deferred = $q.defer();
-                $timeout(function() {
-                    var value = (attrs.value || ngModel.$modelValue || ngModel.$viewValue );
+                $timeout(function () {
+                    var value = (attrs.value || ngModel.$modelValue || ngModel.$viewValue);
                     if (value) {
-                        $('#hdnPeoplePick', element).val(typeof(value) === 'string' ? value : JSON.stringify(value));
+                        $('#hdnPeoplePick', element).val(typeof (value) === 'string' ? value : JSON.stringify(value));
                     }
                     deferred.resolve();
                 });
                 return deferred.promise;
-            }).then(function() {
+            }).then(function () {
                 //1. scope.spContext = SharePoint Client Context object
                 //2. $('#spanPeoplePick') = SPAN that will 'host' the people picker control
                 //3. $('#inputPeoplePick') = INPUT that will be used to capture user input
@@ -64,7 +64,7 @@
                 scope.peoplePicker.InstanceName = "peoplePicker";
                 // Pass current language, if not set defaults to en-US. Use the SPLanguage query string param or provide a string like "nl-BE"
                 // Do not set the Language property if you do not have foreseen javascript resource file for your language
-                //peoplePicker.Language = spLanguage;
+                peoplePicker.Language = spLanguage;
                 // optionally show more/less entries in the people picker dropdown, 4 is the default
                 scope.peoplePicker.MaxEntriesShown = scope.maxEntries;
                 // Can duplicate entries be selected (default = false)
@@ -77,10 +77,10 @@
                 scope.peoplePicker.OnSelectionChanged = function () {
                     var result = JSON.parse($('#hdnPeoplePick', element).val());
                     ngModel.$setViewValue(result);
-                    ngModel.$render();  
+                    ngModel.$render();
                     // workaround for digest already in progress
                     var phase = scope.$root.$$phase;
-                    if(phase !== '$apply' && phase !== '$digest') {                        
+                    if (phase !== '$apply' && phase !== '$digest') {
                         scope.$apply();
                     }
                     // check validity
@@ -101,7 +101,7 @@
                     var minBounds = true;
                     var maxBounds = true;
 
-                    if(ngModel.$viewValue) {
+                    if (ngModel.$viewValue) {
                         if (attrs.hasOwnProperty('minEntries')) {
                             minBounds = (ngModel.$viewValue.length >= parseInt(scope.minEntries, 10));
                         }
@@ -281,11 +281,12 @@
             };
 
             // Returns a resolved user object
-            PeoplePicker.prototype.ResolvedUser = function (login, name, email) {
+            PeoplePicker.prototype.ResolvedUser = function (login, name, email, groupId) {
                 var user = {};
                 user.Login = login;
                 user.Name = name;
                 user.Email = email;
+                user.GroupId = groupId;
                 return user;
             };
 
@@ -330,10 +331,10 @@
             };
 
             // Update the people picker control to show the newly added user
-            PeoplePicker.prototype.RecipientSelected = function (login, name, email) {
+            PeoplePicker.prototype.RecipientSelected = function (login, name, email, groupId) {
                 this.HideSelectionBox();
                 // Push new resolved user to list
-                this.PushResolvedUser(this.ResolvedUser(login, name, email));
+                this.PushResolvedUser(this.ResolvedUser(login, name, email, groupId));
                 // Update the resolved user display
                 this.PeoplePickerControl.html(this.ResolvedUsersToHtml());
                 // Prepare the edit control for a second user selection
@@ -389,6 +390,7 @@
                             var displayName = item['DisplayText'];
                             var title = item['EntityData']['Title'];
                             var email = item['EntityData']['Email'];
+                            var groupId = item['EntityData']['SPGroupID'];
 
                             var loginNameDisplay = email;
                             if (loginName && loginName.indexOf('|') > -1) {
@@ -396,7 +398,7 @@
                                 loginNameDisplay = loginNameDisplay + " " + segs[segs.length - 1];
                                 loginNameDisplay = loginNameDisplay.trim();
                             }
-                            txtResults += this.Format(displayTemplate, this.InstanceName, loginName.replace("\\", "\\\\"), this.HtmlEncode(displayName), email, displayName, loginNameDisplay, title);
+                            txtResults += this.Format(displayTemplate, this.InstanceName, loginName.replace("\\", "\\\\"), this.HtmlEncode(displayName), email, displayName, loginNameDisplay, title, groupId);
                         }
                         var resultDisplay = '';
                         txtResults += '<div class=\'ms-emphasisBorder\' style=\'width: 400px; padding: 4px; border-left: none; border-bottom: none; border-right: none; cursor: default;\'>';
@@ -443,7 +445,7 @@
                 var scriptUrl = "";
                 var scriptRevision = "";
                 $('script').each(function (i, el) {
-                    if (el.src.toLowerCase().indexOf('peoplepickercontrol.js') > -1) {
+                    if (el.src.toLowerCase().indexOf('sp-peoplepicker.js') > -1) {
                         scriptUrl = el.src;
                         scriptRevision = scriptUrl.substring(scriptUrl.indexOf('.js') + 3);
                         scriptUrl = scriptUrl.substring(0, scriptUrl.indexOf('.js'));
@@ -502,7 +504,7 @@
                             }
                         }
                     }
-                    // An ascii character or a space has been pressed
+                        // An ascii character or a space has been pressed
                     else if (keynum >= 48 && keynum <= 90 || keynum == 32) {
                         // get the text entered before the keypress processing (so the last entered key is missing here)
                         var txt = parent.PeoplePickerEdit.val();
@@ -554,7 +556,7 @@
                             }
                         }
                     }
-                    //tab or escape
+                        //tab or escape
                     else if (keynum == 9 || keynum == 27) {
                         //hide the suggestion box
                         parent.HideSelectionBox();

@@ -1,6 +1,6 @@
 (function () {
 
-    angular.module('sp-peoplepicker', ['pascalprecht.translate']).directive('spPeoplePicker', function ($q, $timeout, $compile, $translate) {
+    angular.module('sp-peoplepicker', ['pascalprecht.translate']).directive('spPeoplePicker', ['$q','$timeout','$compile','$translate',function ($q, $timeout, $compile, $translate) {
         //Usage:
         //<sp-people-picker name="taskAssignee" id="taskAssignee" data-ng-model="$scope.taskAssignees" min-entries="1" max-entries="5" allow-duplicates="false" show-login="false" show-title="true" min-characters="2" app-web-url="$scope.spAppWebUrl" />
         var directive = {
@@ -121,7 +121,7 @@
                 }
             });
         }
-    });
+    }]);
 
     var CAMControl;
     (function (CAMControl) {

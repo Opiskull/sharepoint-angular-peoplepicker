@@ -367,7 +367,7 @@
                 var results = this.SharePointContext.parseObjectFromJsonString(searchResult.get_value());
                 var txtResults = '';
 
-                var baseDisplayTemplate = '<div class=\'ms-bgHoverable\' style=\'width: 400px; padding: 4px;\' ng-click=\'{0}.RecipientSelected(\"{1}\", \"{2}\", \"{3}\")\'>{4}';
+                var baseDisplayTemplate = '<div class=\'ms-bgHoverable\' style=\'width: 400px; padding: 4px;\' ng-click=\'{0}.RecipientSelected(\"{1}\", \"{2}\", \"{3}\", \"{7}\")\'>{4}';
                 var displayTemplate = '';
                 if (this.ShowLoginName && this.ShowTitle) {
                     displayTemplate = baseDisplayTemplate + ' ({5})<br/>{6}</div>';

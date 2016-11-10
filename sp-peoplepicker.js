@@ -105,13 +105,15 @@
                     var minBounds = true;
                     var maxBounds = true;
 
-                    if (ngModel.$viewValue) {
-                        if (attrs.hasOwnProperty('minEntries')) {
+                    if (attrs.hasOwnProperty('minEntries')) {
+                        if (ngModel.$viewValue){
                             minBounds = (ngModel.$viewValue.length >= parseInt(scope.minEntries, 10));
+                        } else {
+                            minBounds = false;
                         }
-                        if (attrs.hasOwnProperty('maxEntries')) {
-                            maxBounds = (ngModel.$viewValue.length <= parseInt(scope.maxEntries, 10));
-                        }
+                    }
+                    if (attrs.hasOwnProperty('maxEntries')) {
+                        maxBounds = (ngModel.$viewValue.length <= parseInt(scope.maxEntries, 10));
                     }
 
                     var valid = minBounds && maxBounds;

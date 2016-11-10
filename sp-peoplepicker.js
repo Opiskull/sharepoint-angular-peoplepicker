@@ -113,7 +113,11 @@
                         }
                     }
                     if (attrs.hasOwnProperty('maxEntries')) {
-                        maxBounds = (ngModel.$viewValue.length <= parseInt(scope.maxEntries, 10));
+                        if (ngModel.$viewValue){
+                            maxBounds = (ngModel.$viewValue.length <= parseInt(scope.maxEntries, 10));
+                        } else {
+                            maxBounds = false;
+                        }
                     }
 
                     var valid = minBounds && maxBounds;

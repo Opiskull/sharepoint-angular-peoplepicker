@@ -1,4 +1,4 @@
-(function () {
+(function ($) {
 
     angular.module('sp-peoplepicker', ['pascalprecht.translate']).directive('spPeoplePicker', ['$q','$timeout','$compile','$translate',function ($q, $timeout, $compile, $translate) {
         //Usage:
@@ -582,4 +582,4 @@
         })();
         CAMControl.PeoplePicker = PeoplePicker;
     })(CAMControl || (CAMControl = {}));
-})();
+})($);
